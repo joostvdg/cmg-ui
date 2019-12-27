@@ -1,18 +1,21 @@
 import Layout from '../components/MyLayout.js';
-import CanvasDefinitions from '../components/CatanPolygon.js';
 import { useState } from 'react';
 import fetch from 'isomorphic-unfetch';
 import Link from 'next/link';
+import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
   mapStyle, 
-  processGameCode
+  processGameCode,
+  sliderStyle,
+  sliderBoxStyle,
+  sliderGroup,
+  sliderGroupStyle
 } from '../components/Catan.js';
 
-async function fetchData() {
+async function fetchData(max, min, maxr, minr, max300) {
   let game        = {};
-
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  const response = await fetch('https://catan-map-generator.herokuapp.com/api/map/code?type=large&max=365&min=156&minr=65&maxr=140&max300=22', {
+  const response = await fetch(`https://catan-map-generator.herokuapp.com/api/map/code?type=large&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}`, {
     mode: 'cors', // no-cors, *cors, same-origin
     headers: {
       'Content-Type': 'application/json',
@@ -23,23 +26,64 @@ async function fetchData() {
   const data = await response.json()
   console.log(data)
   game.code = data.GameCode;
-
   processGameCode(game, game.code)
-
   return game
 }
 
 
 export default function P6(props) {
   
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false,
+    info: { error: false, msg: null }
+  });
+
+  const [inputs, setInputs] = useState({
+    maxInputRangeMin:         335,
+    maxInputRangeMax:         390,
+    maxInput:                 365,
+    minInputRangeMin:         135,
+    minInputRangeMax:         185,
+    minInput:                 156,
+    minResourceInputRangeMin: 50, 
+    minResourceInputRangeMax: 75, 
+    minResourceInput:         65,
+    maxResourceInputRangeMin: 115, 
+    maxResourceInputRangeMax: 155, 
+    maxResourceInput:         140,
+    maxOver300InputRangeMin:  16, 
+    maxOver300InputRangeMax:  26, 
+    maxOver300Input:          22,
+  });
+
   const [
     game,
-    setGame
+    setGame,
   ] = useState(props);
 
   async function refresh() {
-    const refreshedProps = await fetchData();
+    const refreshedProps = await fetchData(
+      inputs.maxInput, 
+      inputs.minInput, 
+      inputs.maxResourceInput,
+      inputs.minResourceInput,
+      inputs.maxOver300Input
+    );
     setGame(refreshedProps);
+  }
+
+  const handleOnChange = e => {
+    e.persist()
+    setInputs(prev => ({
+      ...prev,
+      [e.target.id]: e.target.value
+    }))
+    setStatus({
+      submitted: false,
+      submitting: false,
+      info: { error: false, msg: null }
+    })
   }
 
   return (
@@ -48,12 +92,146 @@ export default function P6(props) {
           <div className="container">
             <h3 >6 Players Normal Game</h3>
             <p>Game Code: {game.code}</p>
-            <div className="btn-group" role="group" aria-label="Basic example">
-                <div className="btn-group mr-2" role="group" aria-label="Second group">
-                    <button id="generateMap4Button" type="button" className="btn btn-outline-dark" onClick={refresh}>Generate New Map</button>
+            <div id="explanationGeneral" className="modal" tabindex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Resource Scoring</h5>
+                            </div>
+                            <div className="modal-body">
+                                <p>The scores are the probabilities of throwing the Number on the tile with two dice.
+                                    For example, the chance of throwing 6 or 8, is around 13,9% which is scored as 139.
+                                </p>
+                                <p>There is a score - maximum per three tiles - and a resource score - average score per tile for a particular resource.
+                                    Resource being the things like Grain or Bricks.
+                                </p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="explanationMax" className="modal" tabindex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Max</h5>
+                            </div>
+                            <div className="modal-body">
+                                <p>Maximum score per three adjacent tiles.</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="explanationMin" className="modal" tabindex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Min</h5>
+                            </div>
+                            <div className="modal-body">
+                                <p>Minimum score per three adjacent tiles.</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="explanationMaxR" className="modal" tabindex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">MaxR</h5>
+                            </div>
+                            <div className="modal-body">
+                                <p>Maximum average score per tile for each resource.</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="explanationMinR" className="modal" tabindex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">MinR</h5>
+                            </div>
+                            <div className="modal-body">
+                                <p>Minimum average score per tile for each resource.</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="explanationMax300" className="modal" tabindex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Max300</h5>
+                            </div>
+                            <div className="modal-body">
+                                <p>Maximum number of groups of three tiles that have a score of 300 or more.</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="btn-group" role="group" aria-label="Basic example">
+                    <div className="btn-group mr-2" role="group" aria-label="Second group">
+                        <button id="generateMap4Button" type="button" className="btn btn-outline-dark" onClick={refresh}>Generate New Map</button>
+                        <button className="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#advancedP4" aria-expanded="false" aria-controls="collapseExample">
+                            Advanced Controls
+                        </button>
+                    </div>
+                </div>
+                <div className="collapse" id="advancedP4">
+                    <div className="card card-body" style={sliderGroupStyle}>
+                        <div className="input-group mb-3" >
+                            <div className="input-group-prepend">
+                                <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationMax">?</button>
+                                <h3><span style={sliderBoxStyle} className="input-group-text badge badge-light" id="basic-addon1">Max: {inputs.maxInput}</span></h3>
+                            </div>
+                            <input style={sliderStyle} onChange={handleOnChange} type="range" className="range-field my-4 w-15" min={inputs.maxInputRangeMin} max={inputs.maxInputRangeMax} value={inputs.maxInput} id="maxInput" aria-label="Max" aria-describedby="Max-addon1"/>
+                            <div className="input-group-prepend">
+                                <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationMin">?</button>
+                                <h3><span style={sliderBoxStyle} className="input-group-text badge badge-light" id="basic-addon1">Min: {inputs.minInput}</span></h3>
+                            </div>
+                            <input  style={sliderStyle} onChange={handleOnChange} type="range" className="range-field my-4 w-15" min={inputs.minInputRangeMin} max={inputs.minInputRangeMax} value={inputs.minInput} id="minInput" aria-label="Min" aria-describedby="Min-addon1"/>
+                        </div>
+                        <div className="input-group mb-3" style={sliderGroup}>
+                            <div className="input-group-prepend">
+                                <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationMaxR">?</button>
+                                <h3><span style={sliderBoxStyle} className="input-group-text badge badge-light" id="basic-addon1">MaxR: {inputs.maxResourceInput}</span></h3>
+                            </div>
+                            <input style={sliderStyle} onChange={handleOnChange} type="range" className="range-field my-4 w-15" min={inputs.maxResourceInputRangeMin} max={inputs.maxResourceInputRangeMax} value={inputs.maxResourceInput} id="maxResourceInput" aria-label="MaxR" aria-describedby="MaxR-addon1"/>
+                            <div className="input-group-prepend">
+                                <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationMinR">?</button>
+                                <h3><span style={sliderBoxStyle} className="input-group-text badge badge-light" id="basic-addon1">MinR: {inputs.minResourceInput}</span></h3>
+                            </div>
+                            <input style={sliderStyle} onChange={handleOnChange} type="range" className="range-field my-4 w-15" min={inputs.minResourceInputRangeMin} max={inputs.minResourceInputRangeMax} value={inputs.minResourceInput} id="minResourceInput" aria-label="MinR" aria-describedby="MinR-addon1"/>                
+                        </div>
+                        <div className="input-group mb-3" style={sliderGroup}>
+                            <div className="input-group-prepend">
+                                <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationMax300">?</button>
+                                <h3><span style={sliderBoxStyle} className="input-group-text badge badge-light" id="basic-addon1">Max300: {inputs.maxOver300Input}</span></h3>
+                            </div>
+                            <input style={sliderStyle} onChange={handleOnChange} style={sliderStyle} type="range" className="range-field my-4 w-15" min={inputs.maxOver300InputRangeMin} max={inputs.maxOver300InputRangeMax} value={inputs.maxOver300Input} id="maxOver300Input" aria-label="MaxOver300" aria-describedby="max300-addon1"/>
+                            <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationGeneral">General Explanation</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-          </div>
           <svg className="chart" width="1250" height="1200">
                 
 

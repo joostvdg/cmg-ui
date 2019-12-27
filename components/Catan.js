@@ -31,6 +31,41 @@ export const mapStyle = {
     backgroundColor: "Cornsilk",
 }
 
+export const sliderBoxStyle = {
+    backgroundColor: "ivory",
+    border: "0px",
+    padding: "15px",
+    width: "120px",
+    height: "60px"
+}
+
+export const sliderGroupStyle = {
+    backgroundColor: "ivory",
+    border: "2px solid Wheat",
+    padding: "10px",
+    width: "800px"
+}
+
+export const sliderGroup = {
+    backgroundColor: "ivory",
+    border: "0px",
+    boxSizing: "content-box",
+    height: "60px"
+}
+
+export const sliderStyle = {
+    appearance: "none",
+    cursor: "pointer",
+    backgroundColor: "black",
+    borderBottomColor: "Wheat",
+    borderLeftColor: "Wheat",
+    borderRightColor: "Wheat",
+    borderTopColor: "Wheat",
+    WebkitTapHighlightColor: "Cornsilk",
+    color: "Cornsilk",
+    
+}
+
 export const tileNumbers = new Map();  
 tileNumbers.set("z", "0");
 tileNumbers.set("a", "2");
