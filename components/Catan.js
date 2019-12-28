@@ -33,10 +33,8 @@ export const mapStyle = {
 
 export const sliderBoxStyle = {
     backgroundColor: "ivory",
-    border: "0px",
-    padding: "15px",
-    width: "120px",
-    height: "60px"
+    border: "5px solid ivory",
+    
 }
 
 export const sliderGroupStyle = {
