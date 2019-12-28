@@ -11,11 +11,12 @@ import {
   sliderGroup,
   sliderGroupStyle
 } from '../components/Catan.js';
+import Explanations from '../components/Explanations.js';
 
-async function fetchData(max, min, maxr, minr, max300) {
+async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn) {
   let game        = {};
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  const response = await fetch(`https://catan-map-generator.herokuapp.com/api/map/code?type=large&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}`, {
+  const response = await fetch(`https://catan-map-generator.herokuapp.com/api/map/code?type=large&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}`, {
     mode: 'cors', // no-cors, *cors, same-origin
     headers: {
       'Content-Type': 'application/json',
@@ -38,13 +39,7 @@ async function fetchData(max, min, maxr, minr, max300) {
 
 export default function P6(props) {
   
-  const [status, setStatus] = useState({
-    submitted: false,
-    submitting: false,
-    info: { error: false, msg: null }
-  });
-
-  const [inputs, setInputs] = useState({
+  const defaultInputs = {
     maxInputRangeMin:         335,
     maxInputRangeMax:         390,
     maxInput:                 365,
@@ -60,26 +55,24 @@ export default function P6(props) {
     maxOver300InputRangeMin:  16, 
     maxOver300InputRangeMax:  26, 
     maxOver300Input:          22,
+    maxRowInputRangeMin:       1, 
+    maxRowInputRangeMax:       5, 
+    maxRowInput:               3,
+    maxColumnInputRangeMin:    1, 
+    maxColumnInputRangeMax:    5, 
+    maxColumnInput:            3,
+  }
+
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false,
+    info: { error: false, msg: null }
   });
 
+  const [inputs, setInputs] = useState(defaultInputs);
+
   async function resetInput() {
-    setInputs({
-      maxInputRangeMin:         335,
-      maxInputRangeMax:         390,
-      maxInput:                 365,
-      minInputRangeMin:         135,
-      minInputRangeMax:         185,
-      minInput:                 156,
-      minResourceInputRangeMin: 50, 
-      minResourceInputRangeMax: 75, 
-      minResourceInput:         65,
-      maxResourceInputRangeMin: 115, 
-      maxResourceInputRangeMax: 155, 
-      maxResourceInput:         140,
-      maxOver300InputRangeMin:  16, 
-      maxOver300InputRangeMax:  26, 
-      maxOver300Input:          22,
-    });
+    setInputs(defaultInputs);
   }
 
   const [
@@ -118,101 +111,8 @@ export default function P6(props) {
             <h3 >6 Players Normal Game</h3>
             <p>Game Code: {game.code}</p>
             <p>Error: {game.error}</p>
-            <div id="explanationGeneral" className="modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Resource Scoring</h5>
-                            </div>
-                            <div className="modal-body">
-                                <p>The scores are the probabilities of throwing the Number on the tile with two dice.
-                                    For example, the chance of throwing 6 or 8, is around 13,9% which is scored as 139.
-                                </p>
-                                <p>There is a score - maximum per three tiles - and a resource score - average score per tile for a particular resource.
-                                    Resource being the things like Grain or Bricks.
-                                </p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="explanationMax" className="modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Max</h5>
-                            </div>
-                            <div className="modal-body">
-                                <p>Maximum score per three adjacent tiles.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="explanationMin" className="modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Min</h5>
-                            </div>
-                            <div className="modal-body">
-                                <p>Minimum score per three adjacent tiles.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="explanationMaxR" className="modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">MaxR</h5>
-                            </div>
-                            <div className="modal-body">
-                                <p>Maximum average score per tile for each resource.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="explanationMinR" className="modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">MinR</h5>
-                            </div>
-                            <div className="modal-body">
-                                <p>Minimum average score per tile for each resource.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="explanationMax300" className="modal" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Max300</h5>
-                            </div>
-                            <div className="modal-body">
-                                <p>Maximum number of groups of three tiles that have a score of 300 or more.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Explanations />
+
                 <div className="btn-group" role="group" aria-label="Basic example">
                     <div className="btn-group mr-2" role="group" aria-label="Second group">
                         <button id="generateMap4Button" type="button" className="btn btn-outline-dark" onClick={refresh}>Generate New Map</button>
@@ -246,6 +146,18 @@ export default function P6(props) {
                                 <h3><span style={sliderBoxStyle} className="input-group-text badge badge-light" id="basic-addon1">MinR: {inputs.minResourceInput}</span></h3>
                             </div>
                             <input style={sliderStyle} onChange={handleOnChange} type="range" className="range-field my-4 w-15" min={inputs.minResourceInputRangeMin} max={inputs.minResourceInputRangeMax} value={inputs.minResourceInput} id="minResourceInput" aria-label="MinR" aria-describedby="MinR-addon1"/>                
+                        </div>
+                        <div className="input-group mb-3" style={sliderGroup}>
+                            <div className="input-group-prepend">
+                                <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationMaxRow">?</button>
+                                <h3><span style={sliderBoxStyle} className="input-group-text badge badge-light" id="basic-addon1">MaxRow: {inputs.maxRowInput}</span></h3>
+                            </div>
+                            <input style={sliderStyle} onChange={handleOnChange} type="range" className="range-field my-4 w-15" min={inputs.maxRowInputRangeMin} max={inputs.maxRowInputRangeMax} value={inputs.maxRowInput} id="maxRowInput" aria-label="MaxRow" aria-describedby="MaxRow-addon1"/>
+                            <div className="input-group-prepend">
+                                <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationMaxColumn">?</button>
+                                <h3><span style={sliderBoxStyle} className="input-group-text badge badge-light" id="basic-addon1">MaxColumn: {inputs.maxColumnInput}</span></h3>
+                            </div>
+                            <input style={sliderStyle} onChange={handleOnChange} type="range" className="range-field my-4 w-15" min={inputs.maxColumnInputRangeMin} max={inputs.maxColumnInputRangeMax} value={inputs.maxColumn} id="maxColumnInput" aria-label="maxColumn" aria-describedby="maxColumn-addon1"/>                
                         </div>
                         <div className="input-group mb-3" style={sliderGroup}>
                             <div className="input-group-prepend">
