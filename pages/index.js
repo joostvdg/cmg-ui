@@ -27,6 +27,11 @@ async function fetchData(max, min, maxr, minr, max300) {
   const data = await response.json()
   console.log(data)
   game.code = data.GameCode;
+    if (data.Error) {
+        game.error = data.Error;
+    } else {
+        game.error = "No error, all good."
+    }
   processGameCode(game, game.code)
   return game
 }
@@ -73,6 +78,26 @@ export default function P4(props) {
     setGame(refreshedProps);
   }
 
+    async function resetInput() {
+        setInputs({
+            maxInputRangeMin:         335,
+            maxInputRangeMax:         390,
+            maxInput:                 361,
+            minInputRangeMin:         135,
+            minInputRangeMax:         185,
+            minInput:                 165,
+            minResourceInputRangeMin: 25, 
+            minResourceInputRangeMax: 40, 
+            minResourceInput:         30,
+            maxResourceInputRangeMin: 115, 
+            maxResourceInputRangeMax: 155, 
+            maxResourceInput:         130,
+            maxOver300InputRangeMin:  8, 
+            maxOver300InputRangeMax:  16, 
+            maxOver300Input:          11,
+        });
+    }
+
   const handleOnChange = e => {
     e.persist()
     setInputs(prev => ({
@@ -92,7 +117,8 @@ export default function P4(props) {
             <div className="container">
                 <h3 >4 Players Normal Game</h3>
                 <p>Game Code: {game.code}</p>
-                <div id="explanationGeneral" className="modal" tabindex="-1" role="dialog">
+                <p>Error: {game.error}</p>
+                <div id="explanationGeneral" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -107,12 +133,12 @@ export default function P4(props) {
                                 </p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="explanationMax" className="modal" tabindex="-1" role="dialog">
+                <div id="explanationMax" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -122,12 +148,12 @@ export default function P4(props) {
                                 <p>Maximum score per three adjacent tiles.</p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="explanationMin" className="modal" tabindex="-1" role="dialog">
+                <div id="explanationMin" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -137,12 +163,12 @@ export default function P4(props) {
                                 <p>Minimum score per three adjacent tiles.</p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="explanationMaxR" className="modal" tabindex="-1" role="dialog">
+                <div id="explanationMaxR" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -152,12 +178,12 @@ export default function P4(props) {
                                 <p>Maximum average score per tile for each resource.</p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="explanationMinR" className="modal" tabindex="-1" role="dialog">
+                <div id="explanationMinR" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -167,12 +193,12 @@ export default function P4(props) {
                                 <p>Minimum average score per tile for each resource.</p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="explanationMax300" className="modal" tabindex="-1" role="dialog">
+                <div id="explanationMax300" className="modal" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -182,7 +208,7 @@ export default function P4(props) {
                                 <p>Maximum number of groups of three tiles that have a score of 300 or more.</p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -228,6 +254,7 @@ export default function P4(props) {
                             </div>
                             <input style={sliderStyle} onChange={handleOnChange} style={sliderStyle} type="range" className="range-field my-4 w-15" min={inputs.maxOver300InputRangeMin} max={inputs.maxOver300InputRangeMax} value={inputs.maxOver300Input} id="maxOver300Input" aria-label="MaxOver300" aria-describedby="max300-addon1"/>
                             <button type="button" className="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#explanationGeneral">General Explanation</button>
+                            <button type="button" className="btn btn-outline-success btn-sm" onClick={resetInput}>Reset Input</button>
                         </div>
                     </div>
                 </div>
