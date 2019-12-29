@@ -14,6 +14,34 @@ import {
 import SliderInput from '../components/InputSlider.js';
 import Explanations from '../components/Explanations.js';
 
+async function getMapByCode(code) {
+    console.log("getMapByCode: " + code) ;
+    if (code === "") {
+        return { code: "", error: "no game code input"};
+    }
+    let game        = {};
+    const response = await fetch(
+        `https://catan-map-generator.herokuapp.com/api/map/code/${code}`, 
+        {
+            mode: 'cors', // no-cors, *cors, same-origin
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+        }
+    });
+
+    const data = await response.json()
+    console.log(data)
+    game.code = data.GameCode;
+    if (data.Error) {
+        game.error = data.Error;
+    } else {
+        game.error = "No error, all good."
+    }
+    processGameCode(game, game.code)
+    return game
+}
+
 async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjacentSameInput) {
   let game         = {};
   let adjacentSame = "0";
@@ -43,86 +71,101 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
 
 
 export default function P6(props) {
-  
-  const defaultInputs = {
-    maxInputRangeMin:         335,
-    maxInputRangeMax:         390,
-    maxInput:                 365,
-    minInputRangeMin:         135,
-    minInputRangeMax:         185,
-    minInput:                 156,
-    minResourceInputRangeMin: 50, 
-    minResourceInputRangeMax: 75, 
-    minResourceInput:         65,
-    maxResourceInputRangeMin: 115, 
-    maxResourceInputRangeMax: 155, 
-    maxResourceInput:         140,
-    maxOver300InputRangeMin:  16, 
-    maxOver300InputRangeMax:  26, 
-    maxOver300Input:          22,
-    maxRowInputRangeMin:       1, 
-    maxRowInputRangeMax:       5, 
-    maxRowInput:               3,
-    maxColumnInputRangeMin:    1, 
-    maxColumnInputRangeMax:    5, 
-    maxColumnInput:            3,
-  }
 
-  const [status, setStatus] = useState({
-    submitted: false,
-    submitting: false,
-    info: { error: false, msg: null }
-  });
-
-  const [inputs, setInputs] = useState(defaultInputs);
-  const [checks, setChecks] = useState({
-    adjacentSameInput: true
-  });
-
-  async function resetInput() {
-    setInputs(defaultInputs);
-    setChecks({
-        adjacentSameInput: true
-    });
-}
-
-  const [
-    game,
-    setGame,
-  ] = useState(props);
-
-  async function refresh() {
-    const refreshedProps = await fetchData(
-      inputs.maxInput, 
-      inputs.minInput, 
-      inputs.maxResourceInput,
-      inputs.minResourceInput,
-      inputs.maxOver300Input,
-      checks.adjacentSameInput
-    );
-    setGame(refreshedProps);
-  }
-
-  const handleOnChange = e => {
-    if (e.target.id === "adjacentSameInputInput") {
-      if (e.target.checked) {
-        setChecks({adjacentSameInput: true});
-      } else {
-        setChecks({adjacentSameInput: false});
-      }
+    const defaultInputs = {
+        maxInputRangeMin:         335,
+        maxInputRangeMax:         390,
+        maxInput:                 365,
+        minInputRangeMin:         135,
+        minInputRangeMax:         185,
+        minInput:                 156,
+        minResourceInputRangeMin: 50, 
+        minResourceInputRangeMax: 75, 
+        minResourceInput:         65,
+        maxResourceInputRangeMin: 115, 
+        maxResourceInputRangeMax: 155, 
+        maxResourceInput:         140,
+        maxOver300InputRangeMin:  16, 
+        maxOver300InputRangeMax:  26, 
+        maxOver300Input:          22,
+        maxRowInputRangeMin:       1, 
+        maxRowInputRangeMax:       5, 
+        maxRowInput:               3,
+        maxColumnInputRangeMin:    1, 
+        maxColumnInputRangeMax:    5, 
+        maxColumnInput:            3,
     }
 
-    e.persist()
-    setInputs(prev => ({
-      ...prev,
-      [e.target.id]: e.target.value
-    }))
-    setStatus({
-      submitted: false,
-      submitting: false,
-      info: { error: false, msg: null }
-    })
-  }
+    const [status, setStatus] = useState({
+        submitted: false,
+        submitting: false,
+        info: { error: false, msg: null }
+    });
+
+    const [gameCode, setGameCode] = useState( {gameCodeInput: ""} );
+    const [inputs, setInputs] = useState(defaultInputs);
+    const [checks, setChecks] = useState({
+        adjacentSameInput: true
+    });
+
+    async function resetInput() {
+        setInputs(defaultInputs);
+        setChecks({
+            adjacentSameInput: true
+        });
+    }
+
+    async function getMapByCodeButton() {
+        const refreshedProps = await getMapByCode(gameCode.gameCodeInput);
+        setGame(refreshedProps);
+    }
+
+    async function clearGameCodeInput() {
+        setGameCode({gameCodeInput: ""});
+    }
+
+    const [
+        game,
+        setGame,
+    ] = useState(props);
+
+    async function refresh() {
+        const refreshedProps = await fetchData(
+        inputs.maxInput, 
+        inputs.minInput, 
+        inputs.maxResourceInput,
+        inputs.minResourceInput,
+        inputs.maxOver300Input,
+        checks.adjacentSameInput
+        );
+        setGame(refreshedProps);
+    }
+
+    const handleOnChange = e => {
+        if (e.target.id === "adjacentSameInputInput") {
+            if (e.target.checked) {
+                setChecks({adjacentSameInput: true});
+            } else {
+                setChecks({adjacentSameInput: false});
+            }
+        }
+
+        e.persist()
+        setGameCode(prev => ({
+            ...prev,
+            [e.target.id]: e.target.value
+        }));
+        setInputs(prev => ({
+            ...prev,
+            [e.target.id]: e.target.value
+        }));
+
+        setStatus({
+            submitted: false,
+            submitting: false,
+            info: { error: false, msg: null }
+        })
+    }
 
   return (
     <Layout>
@@ -133,14 +176,22 @@ export default function P6(props) {
             <p>Error: {game.error}</p>
                 <Explanations />
 
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <button className="btn btn-outline-primary" type="button" onClick={getMapByCodeButton}>Generate Map by game code</button>
+                        <button className="btn btn-outline-danger" type="button" onClick={clearGameCodeInput}><b>X</b></button>
+                    </div>
+                    <input id="gameCodeInput" onChange={handleOnChange} type="text" value={gameCode.gameCodeInput} className="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" />
+                </div>
                 <div className="btn-group" role="group" aria-label="Basic example">
                     <div className="btn-group mr-2" role="group" aria-label="Second group">
-                        <button id="generateMap4Button" type="button" className="btn btn-outline-dark" onClick={refresh}>Generate New Map</button>
-                        <button className="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#advancedP6" aria-expanded="false" aria-controls="collapseExample">
+                        <button id="generateMap4Button" type="button" className="btn btn-outline-success" onClick={refresh}>Generate New Map</button>
+                        <button className="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#advancedP6" aria-expanded="false" aria-controls="collapseExample">
                             Advanced Controls
                         </button>
                     </div>
                 </div>
+
                 <div className="collapse" id="advancedP6">
                     <div className="card card-body" style={sliderGroupStyle}>
                         <div className="input-group mb-3" >
@@ -172,7 +223,7 @@ export default function P6(props) {
                     </div>
                 </div>
             </div>
-          <svg className="chart" width="1250" height="1200">
+            <svg className="chart" width="1250" height="1200">
                 
 
             <CanvasDefinitions />
