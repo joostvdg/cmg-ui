@@ -20,6 +20,11 @@ export default function Header() {
                         <a className="navbar-brand mr-md-3">[4 Players Seafarers]</a>
                     </Link>
                 </li>
+                <li className="nav-item">
+                    <Link href="/scenarioa">
+                        <a className="navbar-brand mr-md-3">[4P Seafarers Sc. A]</a>
+                    </Link>
+                </li>
             </ul>
         </nav>
     )

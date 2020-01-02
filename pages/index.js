@@ -60,6 +60,7 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
   const data = await response.json()
   console.log(data)
   game.code = data.GameCode;
+  game.type = "NORMAL";
     if (data.Error) {
         game.error = data.Error;
     } else {
