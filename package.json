@@ -13,8 +13,8 @@
     "type": "git",
     "url": "git+https://github.com/joostvdg/cmg-ui.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["Catan", "Boardgame"],
+  "author": "Joost van der Griendt & H Lin",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/joostvdg/cmg-ui/issues"
@@ -23,9 +23,9 @@
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
     "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.3.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-markdown": "^4.2.2"
+    "next": "^9.4.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-markdown": "^4.3.1"
   }
 }
