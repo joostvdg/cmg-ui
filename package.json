@@ -1,6 +1,6 @@
 {
   "name": "cmg-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,10 @@
     "type": "git",
     "url": "git+https://github.com/joostvdg/cmg-ui.git"
   },
-  "keywords": ["Catan", "Boardgame"],
+  "keywords": [
+    "Catan",
+    "Boardgame"
+  ],
   "author": "Joost van der Griendt & H Lin",
   "license": "ISC",
   "bugs": {
