@@ -4,12 +4,12 @@ import fetch from 'isomorphic-unfetch';
 import Link from 'next/link';
 import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
-  mapStyle, 
-  processGameCode,
-  sliderStyle,
-  sliderBoxStyle,
-  sliderGroup,
-  sliderGroupStyle
+    mapStyle, 
+    processGameCode,
+    sliderStyle,
+    sliderBoxStyle,
+    sliderGroup,
+    sliderGroupStyle
 } from '../components/Catan.js';
 import SliderInput from '../components/InputSlider.js';
 import Explanations from '../components/Explanations.js';
@@ -31,7 +31,7 @@ async function getMapByCode(code) {
     });
 
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     game.code = data.GameCode;
     if (data.Error) {
         game.error = data.Error;
@@ -43,65 +43,65 @@ async function getMapByCode(code) {
 }
 
 async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjacentSameInput) {
-  let game        = {};
-  let adjacentSame = "0";
-  if (adjacentSameInput) {
-    adjacentSame = "1"
-  }
+    let game        = {};
+    let adjacentSame = "0";
+    if (adjacentSameInput) {
+        adjacentSame = "1"
+    }
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  const response = await fetch(`https://catan-map-generator.herokuapp.com/api/map/code?type=normal&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
-    mode: 'cors', // no-cors, *cors, same-origin
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    }
-  });
+    const response = await fetch(`https://catan-map-generator.herokuapp.com/api/map/code?type=normal&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
+        mode: 'cors', // no-cors, *cors, same-origin
+        headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+        }
+    });
 
-  const data = await response.json()
-  console.log(data)
-  game.code = data.GameCode;
-  game.type = "NORMAL";
-    if (data.Error) {
-        game.error = data.Error;
-    } else {
-        game.error = "No error, all good."
-    }
-  processGameCode(game, game.code)
-  return game
+    const data = await response.json()
+//   console.log(data)
+    game.code = data.GameCode;
+    game.type = "NORMAL";
+        if (data.Error) {
+            game.error = data.Error;
+        } else {
+            game.error = "No error, all good."
+        }
+    processGameCode(game, game.code)
+    return game
 }
 
 export default function P4(props) {
-  
-  const [status, setStatus] = useState({
-    submitted: false,
-    submitting: false,
-    info: { error: false, msg: null }
-  });
 
-  const defaultInputs = {
-    maxInputRangeMin:         335,
-    maxInputRangeMax:         390,
-    maxInput:                 361,
-    minInputRangeMin:         135,
-    minInputRangeMax:         185,
-    minInput:                 165,
-    minResourceInputRangeMin: 25, 
-    minResourceInputRangeMax: 40, 
-    minResourceInput:         30,
-    maxResourceInputRangeMin: 115, 
-    maxResourceInputRangeMax: 155, 
-    maxResourceInput:         130,
-    maxOver300InputRangeMin:  8, 
-    maxOver300InputRangeMax:  16, 
-    maxOver300Input:          11,
-    maxRowInputRangeMin:       1, 
-    maxRowInputRangeMax:       4, 
-    maxRowInput:               2,
-    maxColumnInputRangeMin:    1, 
-    maxColumnInputRangeMax:    4, 
-    maxColumnInput:            2,
-  }
-  
+    const [status, setStatus] = useState({
+        submitted: false,
+        submitting: false,
+        info: { error: false, msg: null }
+    });
+
+    const defaultInputs = {
+        maxInputRangeMin:         335,
+        maxInputRangeMax:         390,
+        maxInput:                 361,
+        minInputRangeMin:         135,
+        minInputRangeMax:         185,
+        minInput:                 165,
+        minResourceInputRangeMin: 25, 
+        minResourceInputRangeMax: 40, 
+        minResourceInput:         30,
+        maxResourceInputRangeMin: 115, 
+        maxResourceInputRangeMax: 155, 
+        maxResourceInput:         130,
+        maxOver300InputRangeMin:  8, 
+        maxOver300InputRangeMax:  16, 
+        maxOver300Input:          11,
+        maxRowInputRangeMin:       1, 
+        maxRowInputRangeMax:       4, 
+        maxRowInput:               2,
+        maxColumnInputRangeMin:    1, 
+        maxColumnInputRangeMax:    4, 
+        maxColumnInput:            2,
+    }
+    
     const [gameCode, setGameCode] = useState( {gameCodeInput: ""} );
     const [inputs, setInputs] = useState(defaultInputs);
     const [checks, setChecks] = useState({
@@ -141,33 +141,33 @@ export default function P4(props) {
         setChecks({adjacentSameInput: true});
     }
 
-  const handleOnChange = e => {
-      if (e.target.id === "adjacentSameInputInput") {
-          if (e.target.checked) {
-            setChecks({adjacentSameInput: true});
-          } else {
-            setChecks({adjacentSameInput: false});
-          }
-        
-      }
+    const handleOnChange = e => {
+        if (e.target.id === "adjacentSameInputInput") {
+            if (e.target.checked) {
+                setChecks({adjacentSameInput: true});
+            } else {
+                setChecks({adjacentSameInput: false});
+            }
+            
+        }
 
-    e.persist()
-    setGameCode(prev => ({
+        e.persist()
+        setGameCode(prev => ({
+            ...prev,
+            [e.target.id]: e.target.value
+        }));
+        setInputs(prev => ({
         ...prev,
         [e.target.id]: e.target.value
-      }));
-    setInputs(prev => ({
-      ...prev,
-      [e.target.id]: e.target.value
-    }));
-    setStatus({
-      submitted: false,
-      submitting: false,
-      info: { error: false, msg: null }
-    })
-  }
+        }));
+        setStatus({
+        submitted: false,
+        submitting: false,
+        info: { error: false, msg: null }
+        })
+    }
 
-  return (
+    return (
     <Layout>
         <div style={mapStyle} id="4pchart" >
             <div className="container">

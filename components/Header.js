@@ -25,6 +25,11 @@ export default function Header() {
                         <a className="navbar-brand mr-md-3">[4P Seafarers Sc. A]</a>
                     </Link>
                 </li>
+                <li className="nav-item">
+                    <Link href="/feedback">
+                        <a className="navbar-brand mr-md-3">[Give Feedback]</a>
+                    </Link>
+                </li>
             </ul>
         </nav>
     )
