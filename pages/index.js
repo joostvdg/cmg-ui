@@ -49,7 +49,7 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         adjacentSame = "1"
     }
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    const response = await fetch(`https://catan-map-generator.herokuapp.com/api/map/code?type=normal&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
+    const response = await fetch(`https://cmg-4rr4e6lcaq-ez.a.run.app/api/map/code?type=normal&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
         mode: 'cors', // no-cors, *cors, same-origin
         headers: {
         'Content-Type': 'application/json',

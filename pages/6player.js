@@ -21,7 +21,7 @@ async function getMapByCode(code) {
     }
     let game        = {};
     const response = await fetch(
-        `https://catan-map-generator.herokuapp.com/api/map/code/${code}`, 
+        `https://cmg-4rr4e6lcaq-ez.a.run.app/api/map/code/${code}`, 
         {
             mode: 'cors', // no-cors, *cors, same-origin
             headers: {
