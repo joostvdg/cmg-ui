@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT",
     "heroku-postbuild": "npm run build"
@@ -24,11 +24,10 @@
   },
   "homepage": "https://github.com/joostvdg/cmg-ui#readme",
   "dependencies": {
-    "@zeit/next-css": "^1.0.1",
-    "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.4.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-markdown": "^4.3.1"
+    "isomorphic-unfetch": "^3.1.0",
+    "next": "10.0.8",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-markdown": "^5.0.3"
   }
 }
