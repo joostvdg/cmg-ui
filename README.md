@@ -12,8 +12,7 @@
 
 ## Todo
 
-* input params for UI
-* resource spread validation check
+* Harbors in Map
 * seafarers UI
 * other validations checks
 
