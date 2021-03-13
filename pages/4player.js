@@ -6,6 +6,7 @@ import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
     mapStyle, 
     processGameCode,
+    counter,
     sliderStyle,
     sliderBoxStyle,
     sliderGroup,
@@ -25,8 +26,9 @@ async function getMapByCode(code) {
         type: "SEAFARERS_NORMAL"
     };
     game.error = "No error, all good."
-    processGameCode(game, game.code)
-    return game
+    processGameCode(game, game.code);
+    counter();
+    return game;
 }
 
 async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjacentSameInput) {
@@ -55,6 +57,7 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         }
         // console.log("Processing Game Code: " + game.code);
     processGameCode(game, game.code);
+    counter();
     return game;
 }
 
@@ -157,7 +160,6 @@ export default function P4(props) {
 
     return (
     <Layout>
-
         <div style={mapStyle} className="container">
             <h3 >4 Players Seafarers Game</h3>
             <p>Game Code: {game.code}</p>

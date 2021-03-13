@@ -6,6 +6,7 @@ import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
     mapStyle, 
     processGameCode,
+    counter,
     sliderStyle,
     sliderBoxStyle,
     sliderGroup,
@@ -15,7 +16,7 @@ import SliderInput from '../components/InputSlider.js';
 import Explanations from '../components/Explanations.js';
 
 async function getMapByCode(code) {
-    console.log("getMapByCode: " + code) ;
+    // console.log("getMapByCode: " + code) ;
     if (code === "") {
         return { code: "", error: "no game code input"};
     }
@@ -30,16 +31,17 @@ async function getMapByCode(code) {
         }
     });
 
-    const data = await response.json()
+    const data = await response.json();
     // console.log(data)
     game.code = data.GameCode;
     if (data.Error) {
         game.error = data.Error;
     } else {
-        game.error = "No error, all good."
+        game.error = "No error, all good.";
     }
-    processGameCode(game, game.code)
-    return game
+    processGameCode(game, game.code);
+    counter();
+    return game;
 }
 
 async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjacentSameInput) {
@@ -57,7 +59,7 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         }
     });
 
-    const data = await response.json()
+    const data = await response.json();
 //   console.log(data)
     game.code = data.GameCode;
     game.type = "NORMAL";
@@ -66,7 +68,8 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         } else {
             game.error = "No error, all good."
         }
-    processGameCode(game, game.code)
+    processGameCode(game, game.code);
+    counter();
     return game
 }
 

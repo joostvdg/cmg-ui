@@ -6,6 +6,7 @@ import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
     mapStyle, 
     processGameCode,
+    counter,
     sliderStyle,
     sliderBoxStyle,
     sliderGroup,
@@ -30,7 +31,7 @@ async function getMapByCode(code) {
         }
     });
 
-    const data = await response.json()
+    const data = await response.json();
     // console.log(data)
     game.code = data.GameCode;
     if (data.Error) {
@@ -38,8 +39,9 @@ async function getMapByCode(code) {
     } else {
         game.error = "No error, all good."
     }
-    processGameCode(game, game.code)
-    return game
+    processGameCode(game, game.code);
+    counter();
+    return game;
 }
 
 async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjacentSameInput) {
@@ -57,7 +59,7 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         }
     });
 
-    const data = await response.json()
+    const data = await response.json();
     // console.log(data)
     game.code = data.GameCode;
     game.type = "LARGE";
@@ -66,8 +68,9 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
     } else {
         game.error = "No error, all good."
     }
-    processGameCode(game, game.code)
-    return game
+    processGameCode(game, game.code);
+    counter();
+    return game;
 }
 
 

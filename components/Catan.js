@@ -147,3 +147,11 @@ export function processGameCode(game, gameCode) {
         step++;
     }
 }
+
+export function counter(){
+    // Counter snippet
+    if(!sessionStorage.getItem("_swa") && document.referrer) {
+        fetch("https://counter.dev/track?"+new URLSearchParams({referrer:document.referrer,screen:screen.width+"x"+screen.height,user:"joostvdg",utcoffset:"1"}));
+    }
+    sessionStorage.setItem("_swa","1");
+};
