@@ -69,7 +69,6 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         game.error = "No error, all good."
     }
     processGameCode(game, game.code);
-    counter();
     return game;
 }
 
@@ -143,6 +142,7 @@ export default function P6(props) {
         checks.adjacentSameInput
         );
         setGame(refreshedProps);
+        counter();
     }
 
     const handleOnChange = e => {

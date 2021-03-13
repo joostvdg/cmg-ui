@@ -57,7 +57,6 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         }
         // console.log("Processing Game Code: " + game.code);
     processGameCode(game, game.code);
-    counter();
     return game;
 }
 
@@ -116,6 +115,7 @@ export default function P4(props) {
             checks.adjacentSameInput
         );
         setGame(refreshedProps);
+        counter();
     }
 
     async function getMapByCodeButton() {
