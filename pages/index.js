@@ -1,12 +1,10 @@
 import Layout from '../components/MyLayout.js';
-import { useState } from 'react';
 import fetch from 'isomorphic-unfetch';
-import Link from 'next/link';
+import React, { useRef, useState } from 'react';
 import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
     mapStyle, 
     processGameCode,
-    counter,
     sliderStyle,
     sliderBoxStyle,
     sliderGroup,
@@ -104,6 +102,7 @@ export default function P4(props) {
     }
     
     const [gameCode, setGameCode] = useState( {gameCodeInput: ""} );
+    const [clipboardPermission, setClipboardPermission] = useState( {clipboardPermission: false} );
     const [inputs, setInputs] = useState(defaultInputs);
     const [checks, setChecks] = useState({
         adjacentSameInput: true
@@ -126,11 +125,27 @@ export default function P4(props) {
             checks.adjacentSameInput
         );
         setGame(refreshedProps);
+
+        navigator.permissions.query({name: "clipboard-write"}).then(result => {
+            if (result.state == "granted" || result.state == "prompt") {
+                setClipboardPermission({clipboardPermission: true});
+            }
+        });
     }
 
     async function getMapByCodeButton() {
         const refreshedProps = await getMapByCode(gameCode.gameCodeInput);
         setGame(refreshedProps);
+    }
+
+    async function copyToClipboard() {
+        if (clipboardPermission) {
+            navigator.clipboard.writeText(game.code).then(function() {
+                console.log("Writing game to to clipboard: ", game.code);
+            }, function() {
+                console.log("Warning, failed to write gamecode to clipboard");
+            });
+        }
     }
 
     async function clearGameCodeInput() {
@@ -172,9 +187,21 @@ export default function P4(props) {
     <Layout>
         <div style={mapStyle} id="4pchart" >
             <div className="container">
-                <h3 >4 Players Normal Game</h3>
-                <p>Game Code: {game.code}</p>
-                <p>Error: {game.error}</p>
+                <h3>4 Players Normal Game</h3>
+                <p><b>Error:</b> <i>{game.error}</i></p>
+                <div className="btn-group" role="group" aria-label="Basic example">
+                    <div className="btn-group mr-3" role="group" aria-label="Second group">
+                        <button id="generateMap4Button" type="button" className="btn btn-outline-success" onClick={refresh}>Generate New Map</button>
+                        <button className="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#advancedP4" aria-expanded="false" aria-controls="collapseExample">
+                            Advanced Controls
+                        </button>
+                    </div>
+                </div>
+
+                <p><b>Game Code:</b> <i>{game.code}</i></p>
+                {clipboardPermission &&
+                    <p><button className="btn btn-outline-primary"  type="button" onClick={copyToClipboard}>Copy game code to clipboard</button></p>
+                }
 
                 <Explanations />
 
@@ -183,16 +210,7 @@ export default function P4(props) {
                         <button className="btn btn-outline-primary" type="button" onClick={getMapByCodeButton}>Generate Map by game code</button>
                         <button className="btn btn-outline-danger" type="button" onClick={clearGameCodeInput}><b>X</b></button>
                     </div>
-                    <input id="gameCodeInput" onChange={handleOnChange} type="text" value={gameCode.gameCodeInput} className="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" />
-                </div>
-
-                <div className="btn-group" role="group" aria-label="Basic example">
-                    <div className="btn-group mr-3" role="group" aria-label="Second group">
-                        <button id="generateMap4Button" type="button" className="btn btn-outline-success" onClick={refresh}>Generate New Map</button>
-                        <button className="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#advancedP4" aria-expanded="false" aria-controls="collapseExample">
-                            Advanced Controls
-                        </button>
-                    </div>
+                    <input id="gameCodeInput" onChange={handleOnChange} type="text" value={gameCode.gameCodeInput} className="form-control" placeholder="Use a game code from a previously generated map (see above)" aria-label="" aria-describedby="basic-addon1" />
                 </div>
 
                 <div className="collapse" id="advancedP4">
