@@ -188,16 +188,16 @@ export default function P4(props) {
         <div style={mapStyle} id="4pchart" >
             <div className="container">
                 <h3>4 Players Normal Game</h3>
-                <p><b>Error:</b> <i>{game.error}</i></p>
                 <div className="btn-group" role="group" aria-label="Basic example">
                     <div className="btn-group mr-3" role="group" aria-label="Second group">
-                        <button id="generateMap4Button" type="button" className="btn btn-outline-success" onClick={refresh}>Generate New Map</button>
+                        <button id="generateMap4Button" type="button" className="btn btn-outline-success" onClick={refresh}><b>Generate New Map</b></button>
                         <button className="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#advancedP4" aria-expanded="false" aria-controls="collapseExample">
                             Advanced Controls
                         </button>
                     </div>
                 </div>
 
+                <p><b>Error:</b> <i>{game.error}</i></p>
                 <p><b>Game Code:</b> <i>{game.code}</i></p>
                 {clipboardPermission &&
                     <p><button className="btn btn-outline-primary"  type="button" onClick={copyToClipboard}>Copy game code to clipboard</button></p>
