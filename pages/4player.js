@@ -6,7 +6,6 @@ import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
     mapStyle, 
     processGameCode,
-    counter,
     sliderStyle,
     sliderBoxStyle,
     sliderGroup,
@@ -27,7 +26,6 @@ async function getMapByCode(code) {
     };
     game.error = "No error, all good."
     processGameCode(game, game.code);
-    counter();
     return game;
 }
 
@@ -115,7 +113,6 @@ export default function P4(props) {
             checks.adjacentSameInput
         );
         setGame(refreshedProps);
-        counter();
     }
 
     async function getMapByCodeButton() {
