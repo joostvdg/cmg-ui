@@ -112,9 +112,20 @@ tileCodes.set("6", "url(#desert)");
 tileCodes.set("7", "url(#sea)");
 tileCodes.set("8", "url(#gold)");
 
-export function configureTile(game, landscape, number, tileNumber) {
+export const tileHarbors   = new Map();
+tileHarbors.set("0", "url(#all-harbor)"); // should be ALL 1 v 3
+tileHarbors.set("1", "url(#forest-harbor)");
+tileHarbors.set("2", "url(#pasture-harbor)");
+tileHarbors.set("3", "url(#field-harbor)");
+tileHarbors.set("4", "url(#hill-harbor)");
+tileHarbors.set("5", "url(#mountain-harbor)");
+tileHarbors.set("6", "-");
+
+
+export function configureTile(game, landscape, number, tileNumber, harbor) {
     game["s"  +tileNumber] = landscape;
     game["sn" +tileNumber] = number;
+    game["h"  +tileNumber] = harbor;
 
     if (number === "6" || number === "8") {
         game["tstylesn"+tileNumber]  = redNumberStyle;
@@ -138,7 +149,9 @@ export function processGameCode(game, gameCode) {
         let landscape     = tileCodes.get(landscapeCode);
         let numberCode    = gameCode.charAt(step+1);
         let number        = tileNumbers.get(numberCode);
-        configureTile(game, landscape, number, tileNumber)
+        let harborCode    = gameCode.charAt(step+2);
+        let harbor        = tileHarbors.get(harborCode);
+        configureTile(game, landscape, number, tileNumber, harbor)
         tileNumber++;
         // go past number/harbor
         if (game.type != "SEAFARERS_NORMAL") {        

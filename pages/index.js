@@ -244,9 +244,40 @@ export default function P4(props) {
                     </div>
                 </div>
             </div>
-            <svg className="chart" width="1200px" height="900px">
+            {/* <svg className="chart" width="500px" height="150px">
+                <CanvasDefinitions />
+
+                
+            </svg> */}
+            <svg className="chart" width="1200px" height="960px">
 
                 <CanvasDefinitions />
+                <polygon points="0 60,  20 0,  90 10" fill="url(#all-harbor)" />
+                <polygon points="0 150, 20 90, 90 100" fill="url(#pasture-harbor)" />
+                <text x="70" y="40" textAnchor="left" fill="black" fontSize="12">= 1:3 All</text>
+                <text x="70" y="130" textAnchor="left" fill="black" fontSize="12">= 1:2 Sheep</text>
+
+                <polygon points="0 240, 20 180, 90 190" fill="url(#mountain-harbor)" />
+                <polygon points="0 330, 20 270, 90 280" fill="url(#field-harbor)" />
+                <text x="70" y="220" textAnchor="left" fill="black" fontSize="12">= 1:2 Ore</text>
+                <text x="70" y="310" textAnchor="left" fill="black" fontSize="12">= 1:2 Grain</text>
+                
+                <polygon points="0 420,  20 360, 90 370" fill="url(#forest-harbor)" />
+                <polygon points="0 510,  20 450, 90 460" fill="url(#hill-harbor)" />
+                <text x="70" y="400" textAnchor="left" fill="black" fontSize="12">= 1:2 Wood</text>
+                <text x="70" y="490" textAnchor="left" fill="black" fontSize="12">= 1:2 Brick</text>
+
+                <polygon points="542 147, 559  87,   629 96"  fill={game["h0"]}  stroke="wheat" strokeWidth="3px"/>
+                <polygon points="804 97,  869  87,   888 145" fill={game["h1"]}   stroke="wheat" strokeWidth="3px" />
+                <polygon points="282 297, 299  237,  369 248" fill={game["h2"]}   stroke="wheat" strokeWidth="3px" />
+                <polygon points="978 303, 1030 345,  978 400" fill={game["h6"]}   stroke="wheat" strokeWidth="3px" />
+                <polygon points="196 555, 210  618,  278 603" fill={game["h7"]}   stroke="wheat" strokeWidth="3px" />
+                <polygon points="978 603, 1030 645,  978 700" fill={game["h15"]}  stroke="wheat" strokeWidth="3px" />
+                <polygon points="364 753, 320  795,  364 850" fill={game["h16"]}  stroke="wheat" strokeWidth="3px" />
+                <polygon points="542 855, 559  918,  629 905" fill={game["h17"]}  stroke="wheat" strokeWidth="3px" />
+                {/* <text x="570" y="905" textAnchor="middle" fill="cornsilk" fontSize="25">1:2</text> */}
+
+                <polygon points="805 905, 869 918, 890 855"  stroke="wheat" strokeWidth="3px"  fill={game["h18"]} />
 
                 <g id="firstRow" className="tile">
                     <use id="s0" href="#tile" transform="translate(196.4, 100)" fill={game["s0"]} />
