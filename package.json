@@ -1,6 +1,6 @@
 {
   "name": "cmg-ui",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -31,4 +31,3 @@
     "react-markdown": "^5.0.3"
   }
 }
-
