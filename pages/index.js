@@ -252,22 +252,25 @@ export default function P4(props) {
             <svg className="chart" width="1200px" height="960px">
 
                 <CanvasDefinitions />
-                <polygon points="0 60,  20 0,  90 10" fill="url(#all-harbor)" />
-                <polygon points="0 150, 20 90, 90 100" fill="url(#pasture-harbor)" />
-                <text x="70" y="40" textAnchor="left" fill="black" fontSize="12">= 1:3 All</text>
-                <text x="70" y="130" textAnchor="left" fill="black" fontSize="12">= 1:2 Sheep</text>
+                <text x="15" y="20" textAnchor="left" fill="black" fontSize="18">Harbor Legend</text>
+                <rect x="0" width="150" height="570" rx="15" fillOpacity="5%" />
 
-                <polygon points="0 240, 20 180, 90 190" fill="url(#mountain-harbor)" />
-                <polygon points="0 330, 20 270, 90 280" fill="url(#field-harbor)" />
-                <text x="70" y="220" textAnchor="left" fill="black" fontSize="12">= 1:2 Ore</text>
-                <text x="70" y="310" textAnchor="left" fill="black" fontSize="12">= 1:2 Grain</text>
+                <polygon points="20 90,  40 30,   110 40" fill="url(#all-harbor)" />
+                <polygon points="20 180, 40 120,  110 130" fill="url(#pasture-harbor)" />
+                <text x="70" y="70" textAnchor="left" fill="black" fontSize="12">= 1:3 All</text>
+                <text x="70" y="160" textAnchor="left" fill="black" fontSize="12">= 1:2 Sheep</text>
+
+                <polygon points="20 270, 40 210, 110 220" fill="url(#mountain-harbor)" />
+                <polygon points="20 360, 40 300, 110 310" fill="url(#field-harbor)" />
+                <text x="70" y="250" textAnchor="left" fill="black" fontSize="12">= 1:2 Ore</text>
+                <text x="70" y="340" textAnchor="left" fill="black" fontSize="12">= 1:2 Grain</text>
                 
-                <polygon points="0 420,  20 360, 90 370" fill="url(#forest-harbor)" />
-                <polygon points="0 510,  20 450, 90 460" fill="url(#hill-harbor)" />
-                <text x="70" y="400" textAnchor="left" fill="black" fontSize="12">= 1:2 Wood</text>
-                <text x="70" y="490" textAnchor="left" fill="black" fontSize="12">= 1:2 Brick</text>
+                <polygon points="20 450,  40 390, 110 400" fill="url(#forest-harbor)" />
+                <polygon points="20 540,  40 480, 110 490" fill="url(#hill-harbor)" />
+                <text x="70" y="430" textAnchor="left" fill="black" fontSize="12">= 1:2 Wood</text>
+                <text x="70" y="520" textAnchor="left" fill="black" fontSize="12">= 1:2 Brick</text>
 
-                <polygon points="542 147, 559  87,   629 96"  fill={game["h0"]}  stroke="wheat" strokeWidth="3px"/>
+                <polygon points="544 147, 559  87,   629 98"  fill={game["h0"]}   stroke="wheat" strokeWidth="3px"/>
                 <polygon points="804 97,  869  87,   888 145" fill={game["h1"]}   stroke="wheat" strokeWidth="3px" />
                 <polygon points="282 297, 299  237,  369 248" fill={game["h2"]}   stroke="wheat" strokeWidth="3px" />
                 <polygon points="978 303, 1030 345,  978 400" fill={game["h6"]}   stroke="wheat" strokeWidth="3px" />
