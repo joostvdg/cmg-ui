@@ -255,32 +255,34 @@ export default function P4(props) {
                 <text x="15" y="20" textAnchor="left" fill="black" fontSize="18">Harbor Legend</text>
                 <rect x="0" width="150" height="570" rx="15" fillOpacity="5%" />
 
-                <polygon points="20 90,  40 30,   110 40" fill="url(#all-harbor)" />
-                <polygon points="20 180, 40 120,  110 130" fill="url(#pasture-harbor)" />
+                <use id="l1" href="#harbor" transform="translate(65, 110) rotate(180)" fill="url(#all-harbor)" />
+                <use id="l2" href="#harbor" transform="translate(65, 200) rotate(180)" fill="url(#pasture-harbor)" />
+                
                 <text x="70" y="70" textAnchor="left" fill="black" fontSize="12">= 1:3 All</text>
                 <text x="70" y="160" textAnchor="left" fill="black" fontSize="12">= 1:2 Sheep</text>
 
-                <polygon points="20 270, 40 210, 110 220" fill="url(#mountain-harbor)" />
-                <polygon points="20 360, 40 300, 110 310" fill="url(#field-harbor)" />
+                <use id="l3" href="#harbor" transform="translate(65, 290) rotate(180)" fill="url(#mountain-harbor)" />
+                <use id="l4" href="#harbor" transform="translate(65, 380) rotate(180)" fill="url(#field-harbor)" />
                 <text x="70" y="250" textAnchor="left" fill="black" fontSize="12">= 1:2 Ore</text>
                 <text x="70" y="340" textAnchor="left" fill="black" fontSize="12">= 1:2 Grain</text>
                 
-                <polygon points="20 450,  40 390, 110 400" fill="url(#forest-harbor)" />
-                <polygon points="20 540,  40 480, 110 490" fill="url(#hill-harbor)" />
+                <use id="l5" href="#harbor" transform="translate(65, 470) rotate(180)" fill="url(#forest-harbor)" />
+                <use id="l6" href="#harbor" transform="translate(65, 560) rotate(180)" fill="url(#hill-harbor)" />
                 <text x="70" y="430" textAnchor="left" fill="black" fontSize="12">= 1:2 Wood</text>
                 <text x="70" y="520" textAnchor="left" fill="black" fontSize="12">= 1:2 Brick</text>
 
-                <polygon points="544 147, 559  87,   629 98"  fill={game["h0"]}   stroke="wheat" strokeWidth="3px"/>
-                <polygon points="804 97,  869  87,   888 145" fill={game["h1"]}   stroke="wheat" strokeWidth="3px" />
-                <polygon points="282 297, 299  237,  369 248" fill={game["h2"]}   stroke="wheat" strokeWidth="3px" />
-                <polygon points="978 303, 1030 345,  978 400" fill={game["h6"]}   stroke="wheat" strokeWidth="3px" />
-                <polygon points="196 555, 210  618,  278 603" fill={game["h7"]}   stroke="wheat" strokeWidth="3px" />
-                <polygon points="978 603, 1030 645,  978 700" fill={game["h15"]}  stroke="wheat" strokeWidth="3px" />
-                <polygon points="364 753, 320  795,  364 850" fill={game["h16"]}  stroke="wheat" strokeWidth="3px" />
-                <polygon points="542 855, 559  918,  629 905" fill={game["h17"]}  stroke="wheat" strokeWidth="3px" />
-                {/* <text x="570" y="905" textAnchor="middle" fill="cornsilk" fontSize="25">1:2</text> */}
+                <use id="h1" href="#harbor" transform="translate(455, 95)  rotate(105)" fill={game["h0"]} stroke="wheat" strokeWidth="1px" />
+                <use id="h2" href="#harbor" transform="translate(718, 142) rotate(165)" fill={game["h1"]} stroke="wheat" strokeWidth="1px" />
+                <use id="h3" href="#harbor" transform="translate(976, 294) rotate(165)" fill={game["h2"]} stroke="wheat" strokeWidth="1px" />
 
-                <polygon points="805 905, 869 918, 890 855"  stroke="wheat" strokeWidth="3px"  fill={game["h18"]} />
+                <use id="h6" href="#harbor" transform="translate(278,   300) rotate(45)"  fill={game["h6"]} stroke="wheat" strokeWidth="1px" />
+                <use id="h7" href="#harbor" transform="translate(1068,  550) rotate(225)" fill={game["h7"]} stroke="wheat" strokeWidth="1px" />
+                <use id="h8" href="#harbor" transform="translate(278,   600) rotate(45)"  fill={game["h15"]} stroke="wheat" strokeWidth="1px" />
+
+                <use id="h8"  href="#harbor" transform="translate(892,   752) rotate(285)" fill={game["h16"]} stroke="wheat" strokeWidth="1px" />
+                <use id="h9"  href="#harbor" transform="translate(367,   852) rotate(-15)" fill={game["h17"]} stroke="wheat" strokeWidth="1px" />
+                <use id="h10" href="#harbor" transform="translate(632,   902) rotate(285)" fill={game["h18"]} stroke="wheat" strokeWidth="1px" />
+
 
                 <g id="firstRow" className="tile">
                     <use id="s0" href="#tile" transform="translate(196.4, 100)" fill={game["s0"]} />

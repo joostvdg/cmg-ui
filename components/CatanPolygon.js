@@ -55,6 +55,7 @@ export default function CanvasDefinitions() {
 
             <g>
                 <polygon style={polygonStyle} clipPath="fill-box" colorRendering="optimizeSpeed" id="tile" points="260,0 346,50 346,150 260,200 173,150 173,50 " />
+                <polygon style={polygonStyle} clipPath="fill-box" colorRendering="optimizeSpeed" id="harbor" points="0 0,  00 50, 20,70   70 70" />
             </g>
         </defs>
     );
