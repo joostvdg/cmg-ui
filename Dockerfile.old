@@ -1,0 +1,21 @@
+FROM node:12 as builder
+RUN mkdir -p /usr/src
+WORKDIR /usr/src
+
+# Installing dependencies
+COPY package*.json /usr/src
+RUN npm install -f
+
+COPY . /usr/src
+RUN yarn build
+
+FROM node:12.22.10-stretch-slim
+EXPOSE 3000
+ENV PORT=3000
+RUN mkdir -p /usr/src
+WORKDIR /usr/src
+CMD ["npm", "run", "start"]
+COPY package*.json /usr/src
+COPY --from=builder /usr/src/.next /usr/src
+RUN ls  /usr/
+
