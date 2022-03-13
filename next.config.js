@@ -1,7 +1,11 @@
-// next.config.js
 module.exports = {
-    // ... rest of the configuration.
-    experimental: {
-      outputStandalone: true,
-    },
+  experimental: {
+    outputStandalone: true,
+  },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  },
+  env: {
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
   }
+}

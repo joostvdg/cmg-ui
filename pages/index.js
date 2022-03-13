@@ -12,6 +12,33 @@ import {
 } from '../components/Catan.js';
 import SliderInput from '../components/InputSlider.js';
 import Explanations from '../components/Explanations.js';
+import getConfig from 'next/config'
+const { publicRuntimeConfig: config } = getConfig()
+console.log('config:', JSON.stringify(config))
+
+const defaultInputs = {
+    maxInputRangeMin:         335,
+    maxInputRangeMax:         390,
+    maxInput:                 361,
+    minInputRangeMin:         135,
+    minInputRangeMax:         185,
+    minInput:                 165,
+    minResourceInputRangeMin: 25, 
+    minResourceInputRangeMax: 40, 
+    minResourceInput:         30,
+    maxResourceInputRangeMin: 115, 
+    maxResourceInputRangeMax: 155, 
+    maxResourceInput:         130,
+    maxOver300InputRangeMin:  8, 
+    maxOver300InputRangeMax:  16, 
+    maxOver300Input:          11,
+    maxRowInputRangeMin:       1, 
+    maxRowInputRangeMax:       4, 
+    maxRowInput:               2,
+    maxColumnInputRangeMin:    1, 
+    maxColumnInputRangeMax:    4, 
+    maxColumnInput:            2,
+}
 
 async function getMapByCode(code) {
     // console.log("getMapByCode: " + code) ;
@@ -20,7 +47,7 @@ async function getMapByCode(code) {
     }
     let game        = {};
     const response = await fetch(
-        `https://cmg-4rr4e6lcaq-ez.a.run.app/api/map/code/${code}`, 
+        `${API}/api/map/code/${code}`, 
         {
             mode: 'cors', // no-cors, *cors, same-origin
             headers: {
@@ -42,13 +69,16 @@ async function getMapByCode(code) {
 }
 
 async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjacentSameInput) {
+    const API = process.env.NEXT_PUBLIC_BACKEND_URL;
+    console.log('NEXT_PUBLIC_BACKEND_URL: ', process.env.NEXT_PUBLIC_BACKEND_URL) 
+    
     let game        = {};
     let adjacentSame = "0";
     if (adjacentSameInput) {
         adjacentSame = "1"
     }
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    const response = await fetch(`https://cmg-4rr4e6lcaq-ez.a.run.app/api/map/code?type=normal&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
+    const response = await fetch(`${API}/api/map/code?type=normal&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
         mode: 'cors', // no-cors, *cors, same-origin
         headers: {
         'Content-Type': 'application/json',
@@ -69,37 +99,13 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
     return game;
 }
 
-export default function P4(props) {
+function Page(props) {
 
     const [status, setStatus] = useState({
         submitted: false,
         submitting: false,
         info: { error: false, msg: null }
     });
-
-    const defaultInputs = {
-        maxInputRangeMin:         335,
-        maxInputRangeMax:         390,
-        maxInput:                 361,
-        minInputRangeMin:         135,
-        minInputRangeMax:         185,
-        minInput:                 165,
-        minResourceInputRangeMin: 25, 
-        minResourceInputRangeMax: 40, 
-        minResourceInput:         30,
-        maxResourceInputRangeMin: 115, 
-        maxResourceInputRangeMax: 155, 
-        maxResourceInput:         130,
-        maxOver300InputRangeMin:  8, 
-        maxOver300InputRangeMax:  16, 
-        maxOver300Input:          11,
-        maxRowInputRangeMin:       1, 
-        maxRowInputRangeMax:       4, 
-        maxRowInput:               2,
-        maxColumnInputRangeMin:    1, 
-        maxColumnInputRangeMax:    4, 
-        maxColumnInput:            2,
-    }
     
     const [gameCode, setGameCode] = useState( {gameCodeInput: ""} );
     const [clipboardPermission, setClipboardPermission] = useState( {clipboardPermission: false} );
@@ -408,4 +414,5 @@ export default function P4(props) {
     );
 }
 
-P4.getInitialProps = fetchData;
+Page.getInitialProps = fetchData;
+export default Page
