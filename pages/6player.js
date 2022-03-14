@@ -13,6 +13,10 @@ import {
 } from '../components/Catan.js';
 import SliderInput from '../components/InputSlider.js';
 import Explanations from '../components/Explanations.js';
+import getConfig from 'next/config'
+const { publicRuntimeConfig: config } = getConfig()
+const API = process.env.NEXT_PUBLIC_CLASSIC_API_URL;
+console.log('config:', JSON.stringify(config))
 
 async function getMapByCode(code) {
     // console.log("getMapByCode: " + code) ;
@@ -21,7 +25,7 @@ async function getMapByCode(code) {
     }
     let game        = {};
     const response = await fetch(
-        `https://cmg-4rr4e6lcaq-ez.a.run.app/api/map/code/${code}`, 
+        `${API}/api/map/code/${code}`, 
         {
             mode: 'cors', // no-cors, *cors, same-origin
             headers: {
@@ -49,7 +53,7 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         adjacentSame = "1"
     } 
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    const response = await fetch(`https://cmg-4rr4e6lcaq-ez.a.run.app/api/map/code?type=large&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
+    const response = await fetch(`${API}/api/map/code?type=large&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
         mode: 'cors', // no-cors, *cors, same-origin
         headers: {
         'Content-Type': 'application/json',

@@ -12,6 +12,12 @@ import {
     sliderGroupStyle
 } from '../components/Catan.js';
 
+import getConfig from 'next/config'
+const { publicRuntimeConfig: config } = getConfig()
+const API = process.env.NEXT_PUBLIC_SEAFARERS_API_URL;
+console.log('config:', JSON.stringify(config))
+
+
 async function getMapByCode(code) {
     // console.log("getMapByCode: " + code) ;
     if (code === "") {
@@ -36,7 +42,7 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
         adjacentSame = "1"
     }
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    const response = await fetch(`https://catan-map-generator-seafarers.herokuapp.com/api/normal`, {
+    const response = await fetch(`${API}/api/normal`, {
         mode: 'cors', // no-cors, *cors, same-origin
         headers: {
         'Content-Type': 'application/json',

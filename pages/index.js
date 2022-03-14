@@ -14,6 +14,7 @@ import SliderInput from '../components/InputSlider.js';
 import Explanations from '../components/Explanations.js';
 import getConfig from 'next/config'
 const { publicRuntimeConfig: config } = getConfig()
+const API = process.env.NEXT_PUBLIC_CLASSIC_API_URL;
 console.log('config:', JSON.stringify(config))
 
 const defaultInputs = {
@@ -69,8 +70,7 @@ async function getMapByCode(code) {
 }
 
 async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjacentSameInput) {
-    const API = process.env.NEXT_PUBLIC_BACKEND_URL;
-    console.log('NEXT_PUBLIC_BACKEND_URL: ', process.env.NEXT_PUBLIC_BACKEND_URL) 
+    console.log('NEXT_PUBLIC_CLASSIC_API_URL: ', API) 
     
     let game        = {};
     let adjacentSame = "0";
