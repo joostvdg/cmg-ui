@@ -70,15 +70,69 @@ docker buildx build . --platform linux/arm64,linux/amd64 --tag caladreas/cmg-ui:
 docker run -i --rm --name cmg-ui -p 3000:3000 cmg-ui:0.1.0-d
 ```
 
-### Next.Config.js
+## Dynamic Environment Variables
+
+Unfortunately, due to how the NextJS framework works, Environment Variables are "hardcoded" at build time. There should be some way to get [dynamic environment variables](https://www.saltycrane.com/blog/2021/04/buildtime-vs-runtime-environment-variables-nextjs-docker/) into the client from the NodeJS environment. But I have not been able to do so.
+
+So, one way is to set a placeholder at that is written into the optimized (by the next build) files, and then do a find & replace of this placeholder just before starting the application.
+
+I found this solution in a blog post from [Renato Pozzi](https://dev.to/itsrennyman/manage-nextpublic-environment-variables-at-runtime-with-docker-53dl) on dev.to. 
+
+The gist of the solution:
+
+* use a `next.config.js` file with a `publicRuntimeConfig` and `env` section
+* define a placeholder value in your `Dockerfile` and any `.env` files you use
+* leverage the multi-stage docker build as outlined by [Vercel](https://github.com/vercel/next.js/tree/canary/examples/with-docker)
+* use an entrypoint script, in your Dockerfile, that does the find and replace and runs any command passed to it
+  * the `run any command` is vital, as it means we can still start the application normally with a Docker `cmd` while ensuring the find & replace is executed prior to the application starting
+
+### entrypoint.sh
+
+We look for all files in the `/app.next` folder, where the files from the next build (in my case, `RUN yarn build`) are located. It is files in here that have "hardcoded" the environment variables at build time.
+
+We then find & replace our placeholder value with the current live environment variable. We can pass this environment variable to the docker run command `docker run -env NEXT_PUBLIC_BACKEND_URL=my-url caladreas/cmg-ui:0.2.3` or as an enviromnent configuration in a Kubernetes manifest.
+
+
+```shell
+#!/bin/sh
+## script is copied from Renato Pozzi: https://dev.to/itsrennyman/manage-nextpublic-environment-variables-at-runtime-with-docker-53dl 
+echo "Check that we have NEXT_PUBLIC_BACKEND_URL vars"
+test -n "$NEXT_PUBLIC_BACKEND_URL"
+
+find /app/.next \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i "s#NEXT_PUBLIC_BACKEND_URL_PLACEHOLDER#$NEXT_PUBLIC_BACKEND_URL#g"
+
+echo "Starting Nextjs"
+exec "$@"
+```
+
+### Dockerfile
+
+Note, this is a truncated version of the file, limited to the lines that matter for the dynamic enviromnent variables to work. Look [Dockerfile](here) for the full file.
+
+```dockerfile
+FROM node:16-alpine AS runner
+ENV NODE_ENV production
+ENV NEXT_PUBLIC_BACKEND_URL NEXT_PUBLIC_BACKEND_URL_PLACEHOLDER
+COPY --from=builder /app/next.config.js ./
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["node", "server.js"]
+```
+
+The `ENTRYPOINT` will run our find & replace script, and then executes whatever is passed to via the `CMD [...]` instruction.
+
+## Next.Config.js
 
 ```js
-// next.config.js
 module.exports = {
-  // ... rest of the configuration.
   experimental: {
     outputStandalone: true,
   },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  },
+  env: {
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  }
 }
 ```
 
@@ -90,3 +144,5 @@ module.exports = {
 * https://nextjs.org/learn/basics/deploying-nextjs-app/finally
 * https://dev.to/kumareth/next-js-docker-made-easy-2bok
 * https://github.com/akiran/nextjs-demo/blob/master/.gitignore
+* https://dev.to/itsrennyman/manage-nextpublic-environment-variables-at-runtime-with-docker-53dl
+* https://www.saltycrane.com/blog/2021/04/buildtime-vs-runtime-environment-variables-nextjs-docker/
