@@ -55,7 +55,7 @@ Things to do:
 #### Docker Build
 
 ```sh
- docker build -t cmg-ui:0.1.0-d .      
+docker build -t cmg-ui:0.1.0-d .      
 ```
 
 #### Docker Multi-arch Build

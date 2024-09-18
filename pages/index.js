@@ -15,6 +15,7 @@ import Explanations from '../components/Explanations.js';
 import getConfig from 'next/config'
 const { publicRuntimeConfig: config } = getConfig()
 const API = process.env.NEXT_PUBLIC_CLASSIC_API_URL;
+const INTERNAL_API = process.env.NEXT_PUBLIC_CLASSIC_API_INTERNAL_URL;
 console.log('config:', JSON.stringify(config))
 
 const defaultInputs = {
@@ -65,6 +66,36 @@ async function getMapByCode(code) {
     } else {
         game.error = "No error, all good.";
     }
+    processGameCode(game, game.code);
+    return game;
+}
+
+async function fetchDataInternal(max, min, maxr, minr, max300, maxRow, maxColumn, adjacentSameInput) {
+    console.log('NEXT_PUBLIC_CLASSIC_API_INTERNAL_URL: ', INTERNAL_API) 
+    
+    let game        = {};
+    let adjacentSame = "0";
+    if (adjacentSameInput) {
+        adjacentSame = "1"
+    }
+  // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+    const response = await fetch(`${INTERNAL_API}/api/map/code?type=normal&max=${max}&min=${min}&minr=${minr}&maxr=${maxr}&max300=${max300}&maxRow=${maxRow}&maxColumn=${maxColumn}&adjacentSame=${adjacentSame}`, {
+        mode: 'cors', // no-cors, *cors, same-origin
+        headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+        }
+    });
+
+    const data = await response.json();
+//   console.log(data)
+    game.code = data.GameCode;
+    game.type = "NORMAL";
+        if (data.Error) {
+            game.error = data.Error;
+        } else {
+            game.error = "No error, all good."
+        }
     processGameCode(game, game.code);
     return game;
 }
@@ -414,5 +445,5 @@ function Page(props) {
     );
 }
 
-Page.getInitialProps = fetchData;
+Page.getInitialProps = fetchDataInternal;
 export default Page

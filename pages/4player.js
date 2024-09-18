@@ -43,7 +43,7 @@ async function fetchData(max, min, maxr, minr, max300, maxRow, maxColumn, adjace
     }
   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     const response = await fetch(`${API}/api/normal`, {
-        mode: 'cors', // no-cors, *cors, same-origin
+        mode: 'no-cors', // no-cors, *cors, same-origin
         headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
