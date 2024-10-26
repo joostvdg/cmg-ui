@@ -1,6 +1,7 @@
 import Layout from '../components/MyLayout.js';
 import fetch from 'isomorphic-unfetch';
 import React, { useRef, useState } from 'react';
+import Link from 'next/link'
 import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
     mapStyle, 
@@ -224,6 +225,15 @@ function Page(props) {
     <Layout>
         <div style={mapStyle} id="4pchart" >
             <div className="container">
+                <h2>CMG Has Moved!</h2>
+                <p>
+                    The new location is:
+                    <Link href="https://map.cmg.joostvdg.net">
+                        <a className="navbar-brand mr-md-3">https://map.cmg.joostvdg.net</a>
+                    </Link>
+                </p>
+                <br/>
+
                 <h3>4 Players Normal Game</h3>
                 <div className="btn-group" role="group" aria-label="Basic example">
                     <div className="btn-group mr-3" role="group" aria-label="Second group">

@@ -1,7 +1,7 @@
 import Layout from '../components/MyLayout.js';
 import { useState } from 'react';
 import fetch from 'isomorphic-unfetch';
-import Link from 'next/link';
+import Link from 'next/link'
 import CanvasDefinitions from '../components/CatanPolygon.js';
 import {
     mapStyle, 
